@@ -1,61 +1,51 @@
 "use strict";
 
 const express = require("express");
-const router = express.Router();
 
 const autho = require("../middlewares/authorization");
-const api = require("./usuario.api");
+const api = require("./evento.api");
+const router = express.Router();
 
 router
-  .route("/usuarios")
+  .route("/eventos")
   .all(autho.requiresLocalLogin)
   .get((req, res, next) => {
     api
       .query(req.query)
-      .then(usuarios => {
-        res.send(usuarios);
+      .then(eventos => {
+        res.send(eventos);
       })
       .catch(next);
   })
   .post((req, res, next) => {
     api
       .create(req.body, req.user._id)
-      .then(usuarios => {
-        res.send(usuarios);
+      .then(evento => {
+        res.send(evento);
       })
       .catch(next);
   });
-
-router.param("usuarioId", (req, res, next, id) => {
+router.param("eventoId", (req, res, next, id) => {
   api
     .get(id)
-    .then(usuario => {
-      req.usuario = usuario;
+    .then(evento => {
+      req.evento = evento;
       next();
     })
     .catch(next);
 });
-
 router
-  .route("/usuarios/:usuarioId")
+  .route("/eventos/:eventoId")
   .all(autho.requiresLocalLogin)
   .get((req, res) => {
-    res.send(req.usuario);
-  })
-  .post((req, res, next) => {
-    api
-      .update(req.usuario, req.body)
-      .then(usuario => {
-        res.send(usuario);
-      })
-      .catch(next);
+    res.send(req.evento);
   })
   .delete((req, res, next) => {
     api
-      .delete(req.usuario)
+      .delete(req.evento)
       .then(() => {
         res.send({
-          _id: req.params.usuarioId
+          _id: req.params.eventoId
         });
       })
       .catch(next);

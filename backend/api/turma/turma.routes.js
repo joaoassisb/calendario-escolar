@@ -1,61 +1,59 @@
 "use strict";
 
 const express = require("express");
-const router = express.Router();
 
 const autho = require("../middlewares/authorization");
-const api = require("./usuario.api");
+const api = require("./turma.api");
+const router = express.Router();
 
 router
-  .route("/usuarios")
+  .route("/turmas")
   .all(autho.requiresLocalLogin)
   .get((req, res, next) => {
     api
       .query(req.query)
-      .then(usuarios => {
-        res.send(usuarios);
+      .then(turmas => {
+        res.send(turmas);
       })
       .catch(next);
   })
   .post((req, res, next) => {
     api
       .create(req.body, req.user._id)
-      .then(usuarios => {
-        res.send(usuarios);
+      .then(turmas => {
+        res.send(turmas);
       })
       .catch(next);
   });
-
-router.param("usuarioId", (req, res, next, id) => {
+router.param("turmaId", (req, res, next, id) => {
   api
     .get(id)
-    .then(usuario => {
-      req.usuario = usuario;
+    .then(turma => {
+      req.turma = turma;
       next();
     })
     .catch(next);
 });
-
 router
-  .route("/usuarios/:usuarioId")
+  .route("/turmas/:turmaId")
   .all(autho.requiresLocalLogin)
   .get((req, res) => {
-    res.send(req.usuario);
+    res.send(req.turma);
   })
   .post((req, res, next) => {
     api
-      .update(req.usuario, req.body)
-      .then(usuario => {
-        res.send(usuario);
+      .update(req.turma, req.body)
+      .then(turma => {
+        res.send(turma);
       })
       .catch(next);
   })
   .delete((req, res, next) => {
     api
-      .delete(req.usuario)
+      .delete(req.turma)
       .then(() => {
         res.send({
-          _id: req.params.usuarioId
+          _id: req.params.turmaId
         });
       })
       .catch(next);

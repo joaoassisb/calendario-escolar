@@ -15,7 +15,7 @@ const router = express.Router();
 app.use("/api", api);
 // conexão com o MongoDB
 const dbRoute =
-  "mongodb://teste:teste123@ds064748.mlab.com:64748/calendario-escolar";
+  "mongodb://joao:joao123@ds064748.mlab.com:64748/calendario-escolar";
 
 mongoose.connect(dbRoute, { useNewUrlParser: true });
 

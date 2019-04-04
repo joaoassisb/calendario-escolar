@@ -1,71 +1,31 @@
 "use strict";
 
-const _ = require("lodash");
-
-function filterUnsafeFields(data) {
-  return _.omit(data, ["_id"]);
-}
-
+const createError = require("http-errors");
 const Usuario = require("./usuario.model");
 
 module.exports = {
-  load(req, res, next, usuarioId) {
-    const query = Usuario.findById(usuarioId);
-
-    query
-      .exec()
-      .then(usuario => {
-        if (!usuario) {
-          return;
-        }
-
-        req.usuario = usuario;
-        next();
-      })
-      .catch(next);
+  query(filtros) {
+    return Usuario.find(filtros).exec();
   },
-  query(req, res, next) {
-    Usuario.find(req.query)
-      .then(usuarios => {
-        res.send(usuarios);
-      })
-      .catch(next);
-  },
-  create(req, res, next) {
-    const data = filterUnsafeFields(req.body);
+  create(data) {
     const usuario = new Usuario(data);
 
-    usuario
-      .save()
-      .then(() => {
-        res.send(usuario);
-      })
-      .catch(next);
+    return usuario.save();
   },
-  remove(req, res, next) {
-    const { usuario } = req;
+  get(usuarioId) {
+    return Usuario.findById(usuarioId).then(usuario => {
+      if (!usuario) {
+        throw createError(404, "Usuário não encontrado");
+      }
 
-    usuario
-      .remove()
-      .then(() => {
-        res.sendStatus(200);
-      })
-      .catch(next);
+      return usuario;
+    });
   },
-  get(req, res) {
-    res.send(req.usuario);
+  update(usuario, data) {
+    Object.assign(usuario, data);
+    return usuario.save();
   },
-  update(req, res, next) {
-    const { usuario } = req;
-    const data = filterUnsafeFields(req.body);
-
-    _.assign(usuario, data);
-
-    usuario
-      .save()
-      .then(() => {
-        res.send(usuario);
-      })
-      .catch(next);
+  remove(usuario) {
+    return usuario.remove();
   }
 };
