@@ -1,0 +1,24 @@
+{
+  "name": "calendario-escolar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"cd backend && nodemon index.js\" \"cd frontend && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaoassisb/calendario-escolar.git"
+  },
+  "author": "Fillip, João, Marlon e Vitor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joaoassisb/calendario-escolar/issues"
+  },
+  "homepage": "https://github.com/joaoassisb/calendario-escolar#readme",
+  "dependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.10"
+  }
+}
