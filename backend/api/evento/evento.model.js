@@ -5,18 +5,28 @@ const { Schema } = mongoose;
 const { ObjectId } = mongoose.SchemaTypes;
 
 const EventoSchema = new Schema({
+  turma: {
+    type: ObjectId,
+    ref: "Turma"
+    // required: true
+    //fixme
+  },
   data: {
     type: String,
     required: true
   },
   usuarioCriador: {
     type: ObjectId,
-    ref: "Usuario",
-    required: true
+    ref: "Usuario"
+    // required: true
   },
-  titulo: {
+  nome: {
     type: String,
     required: true
+  },
+  tipo: {
+    type: String,
+    enum: ["Prova", "Atividade"]
   }
 });
 

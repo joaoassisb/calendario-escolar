@@ -29,4 +29,4 @@ const LogEventosSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model("Evento", LogEventosSchema, "eventos");
+module.exports = mongoose.model("LogEventos", LogEventosSchema, "logs-eventos");

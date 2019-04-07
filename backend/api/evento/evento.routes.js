@@ -1,25 +1,27 @@
 "use strict";
 
 const express = require("express");
-
-const autho = require("../middlewares/authorization");
+//fixme
+// const autho = require("../middlewares/authorization");
 const api = require("./evento.api");
 const router = express.Router();
 
 router
   .route("/eventos")
-  .all(autho.requiresLocalLogin)
+  // .all(autho.requiresLocalLogin)
   .get((req, res, next) => {
     api
       .query(req.query)
       .then(eventos => {
+        console.log(eventos);
         res.send(eventos);
       })
       .catch(next);
   })
   .post((req, res, next) => {
     api
-      .create(req.body, req.user._id)
+      // .create(req.body, req.user._id)
+      .create(req.body)
       .then(evento => {
         res.send(evento);
       })
@@ -36,7 +38,7 @@ router.param("eventoId", (req, res, next, id) => {
 });
 router
   .route("/eventos/:eventoId")
-  .all(autho.requiresLocalLogin)
+  // .all(autho.requiresLocalLogin)
   .get((req, res) => {
     res.send(req.evento);
   })

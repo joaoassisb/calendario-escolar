@@ -28,7 +28,7 @@ authMiddleware(routes, {
 
 routes.use(require(`${__dirname}/usuario/usuario.routes.js`));
 
-routes.use(autho.requiresLocalLogin);
+// routes.use(autho.requiresLocalLogin);
 
 glob.sync(`${__dirname}/**/*.routes.js`).forEach(filename => {
   routes.use(require(filename));
