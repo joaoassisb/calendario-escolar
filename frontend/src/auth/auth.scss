@@ -1,0 +1,15 @@
+.login-usuario-page,
+.cadastro-usuario-page {
+	> .row {
+		background-color: #fff;
+		border: 1px solid #ddd;
+
+		> div {
+			padding: 30px;
+
+			&:nth-child(2) {
+				border-left: 1px dashed #ddd;
+			}
+		}
+	}
+}
