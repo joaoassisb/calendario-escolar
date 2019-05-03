@@ -4,9 +4,6 @@ const createError = require("http-errors");
 const Usuario = require("./usuario.model");
 
 module.exports = {
-  query(filtros) {
-    return Usuario.find(filtros).exec();
-  },
   create(data) {
     const usuario = new Usuario(data);
 

@@ -45,71 +45,6 @@ function setupPassport(userModelName, strategyName) {
       }
     )
   );
-  passport.use(
-    "facebook",
-    new FacebookStrategy(
-      {
-        clientID: "984255598439076",
-        clientSecret: "d80a8ad8c44abc202f8b3ba659b3e21b",
-        callbackURL:
-          "https://projetowebsaude.azurewebsites.net/api/login/facebook/callback",
-        profileFields: ["id", "email", "displayName"]
-      },
-      (accessToken, refreshToken, profile, done) => {
-        const userModelName = "Usuario";
-        const UserModel = mongoose.model("Usuario");
-
-        UserModel.findOne(
-          {
-            $or: [
-              {
-                "social.facebook": profile.id
-              },
-              {
-                email: profile.emails[0].value
-              }
-            ]
-          },
-          (err, user) => {
-            if (err) {
-              return done(err);
-            }
-
-            if (user) {
-              //usuario com email cadastrado, atulizar atributo de facebook
-              if (!user.social || !user.social.facebook) {
-                user.social = {
-                  facebook: profile.id
-                };
-                user.social.facebook = profile.id;
-                return user.save().then(() => {
-                  return done(null, user);
-                });
-              }
-              //usuario com facebook ja cadastrado, retornar validação
-              return done(null, user);
-            }
-
-            const novoUsuario = new UserModel({
-              name: profile.displayName,
-              social: {
-                facebook: profile.id
-              },
-              email: profile.emails[0].value
-            });
-
-            return novoUsuario.save((err, novoUsuario) => {
-              if (err) {
-                done(err);
-              }
-
-              return done(null, novoUsuario);
-            });
-          }
-        );
-      }
-    )
-  );
 }
 
 passport.serializeUser((user, next) => {
@@ -161,21 +96,6 @@ module.exports = function(app, options) {
         email: req.user.email,
         id: req.user._id
       });
-    }
-  );
-
-  app.get(
-    "/login/facebook",
-    passport.authenticate("facebook", {
-      scope: ["email"]
-    })
-  );
-
-  app.get(
-    "/login/facebook/callback",
-    passport.authenticate("facebook", { failureRedirect: "/#!/login" }),
-    (req, res) => {
-      res.redirect("/#!/home");
     }
   );
 

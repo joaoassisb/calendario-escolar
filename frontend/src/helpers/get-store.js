@@ -3,15 +3,17 @@ import { routerReducer, routerMiddleware } from "react-router-redux";
 import thunkMiddleware from "redux-thunk";
 import { createLogger } from "redux-logger";
 
-// import { authMiddleware } from "../middlewares/auth.middleware";
-// import { callAPIMiddleware } from "../middlewares/call-api.middleware";
+import { authMiddleware } from "../middlewares/auth.middleware";
+import { callAPIMiddleware } from "../middlewares/call-api.middleware";
 
-// import session from "../auth/auth.redux";
+import session from "../auth/auth.redux";
 
-const rootReducer = {};
+const rootReducer = {
+  session
+};
 
 export const getStore = (initialState, history) => {
-  const middlewares = [thunkMiddleware];
+  const middlewares = [thunkMiddleware, authMiddleware, callAPIMiddleware];
 
   let composeEnhancers = compose;
 

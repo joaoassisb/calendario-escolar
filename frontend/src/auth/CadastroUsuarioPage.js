@@ -3,72 +3,137 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { Form, FormInput } from "../components/forms";
 import { http } from "../helpers/http";
 import { navigate } from "../helpers/navigate.actions";
 
-const validacoesFormulario = {
-  name: {
-    custom: [
-      nome => {
-        return nome.split(" ").filter(s => Boolean(s)).length >= 2;
-      },
-      "Ao menos um sobrenome deve ser informado"
-    ]
-  },
-  repeatedPassword: {
-    isEqualField: ["password", "Repita a mesma senha utilizada"]
-  }
-};
-
 class CadastroUsuarioPage extends Component {
-  cadastrar(usuario) {
-    http.post("/api/user", usuario).then(() => {
-      this.props.navigate("/login");
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      nome: "",
+      email: "",
+      senha: "",
+      senhaRepetida: ""
+    };
+  }
+
+  handleChange({ target }) {
+    const validacoes = {
+      senhaRepetida: value => {
+        if (value !== this.state.senha) {
+          return "As senhas devem ser iguais.";
+        }
+
+        return "";
+      }
+    };
+
+    if (validacoes[target.name]) {
+      const mensagemValidacao = validacoes[target.name](target.value);
+      target.setCustomValidity(mensagemValidacao ? mensagemValidacao : "");
+    }
+
+    this.setState({
+      [target.name]: target.value
     });
+  }
+
+  cadastrar(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const usuario = {
+      nome: this.state.nome,
+      email: this.state.email,
+      password: this.state.senha
+    };
+
+    http.post("/api/usuarios", usuario).then(() => {
+      this.voltar();
+    });
+  }
+
+  voltar() {
+    this.props.navigate("/");
   }
 
   render() {
     return (
-      <div className="cadastro-usuario-page container">
-        <div className="row my-5 p-3">
-          <div className="col-md-6">
-            {/* <p className="text-center">
-              <Link to="/login">Já é cadastrado? Acesse agora mesmo sua conta</Link>
-            </p> */}
-          </div>
+      <div className="cadastro-usuario-page my-5">
+        <div className="row">
+          <div className="col-md-6 offset-md-3">
+            <h3 className="mb-3 text-center">Cadastre-se </h3>
 
-          <div className="col-md-6">
-            <h3 className="mb-3">Cadastre-se agora mesmo</h3>
+            <form onSubmit={e => this.cadastrar(e)} className="form">
+              <div className="form-group">
+                <label htmlFor="nomeInput">Nome</label>
+                <input
+                  id="nomeInput"
+                  type="text"
+                  name="nome"
+                  value={this.state.nome}
+                  onChange={e => this.handleChange(e)}
+                  autoFocus
+                  required
+                  className="form-control"
+                />
+              </div>
 
-            <Form
-              onSubmit={this.cadastrar.bind(this)}
-              onSubmitLabel="Cadastrar"
-              onSubmitClasses="btn-block text-light"
-              validations={validacoesFormulario}
-            >
-              <FormInput
-                name="name"
-                type="text"
-                label="Nome completo"
-                required
-              />
-              <FormInput name="email" type="email" label="Email" required />
-              <FormInput
-                name="password"
-                type="password"
-                label="Senha"
-                required
-                minLength="6"
-              />
-              <FormInput
-                name="repeatedPassword"
-                type="password"
-                label="Repetir senha"
-                required
-                minLength="6"
-              />
-            </Form>
+              <div className="form-group">
+                <label htmlFor="emailInput">Email</label>
+                <input
+                  id="emailInput"
+                  type="email"
+                  name="email"
+                  value={this.state.email}
+                  onChange={e => this.handleChange(e)}
+                  autoFocus
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="senhaInput">Senha</label>
+
+                <input
+                  id="senhaInput"
+                  type="password"
+                  name="senha"
+                  value={this.state.senha}
+                  onChange={e => this.handleChange(e)}
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="senhaInput">Repita sua senha</label>
+
+                <input
+                  id="senhaRepetidaInput"
+                  type="password"
+                  name="senhaRepetida"
+                  value={this.state.senhaRepetida}
+                  onChange={e => this.handleChange(e)}
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="text-center mb-4">
+                <Link to="/">
+                  <button className="btn btn-danger mr-2" type="button">
+                    Voltar
+                  </button>
+                </Link>
+
+                <button className="btn btn-success" type="submit">
+                  Cadastrar
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

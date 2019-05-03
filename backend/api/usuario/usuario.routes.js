@@ -6,25 +6,14 @@ const router = express.Router();
 const autho = require("../middlewares/authorization");
 const api = require("./usuario.api");
 
-router
-  .route("/usuarios")
-  .all(autho.requiresLocalLogin)
-  .get((req, res, next) => {
-    api
-      .query(req.query)
-      .then(usuarios => {
-        res.send(usuarios);
-      })
-      .catch(next);
-  })
-  .post((req, res, next) => {
-    api
-      .create(req.body, req.user._id)
-      .then(usuarios => {
-        res.send(usuarios);
-      })
-      .catch(next);
-  });
+router.route("/usuarios").post((req, res, next) => {
+  api
+    .create(req.body)
+    .then(usuario => {
+      res.send(usuario);
+    })
+    .catch(next);
+});
 
 router.param("usuarioId", (req, res, next, id) => {
   api

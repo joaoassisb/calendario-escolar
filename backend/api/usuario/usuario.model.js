@@ -52,10 +52,6 @@ UsuarioSchema.method({
     return bcrypt.compareSync(plainText, this.encrypted_password);
   },
   authenticate(plainText) {
-    if (this.legacyMode) {
-      return this.legacyAuthenticate(plainText);
-    }
-
     const encryptedPassword = this.encryptPassword(plainText);
 
     return encryptedPassword === this.hashedPassword;
