@@ -48,9 +48,6 @@ UsuarioSchema.virtual("password").set(function(password) {
 });
 
 UsuarioSchema.method({
-  legacyAuthenticate(plainText) {
-    return bcrypt.compareSync(plainText, this.encrypted_password);
-  },
   authenticate(plainText) {
     const encryptedPassword = this.encryptPassword(plainText);
 
@@ -83,7 +80,7 @@ UsuarioSchema.static({
       {
         email: email
       },
-      "+salt +hashedPassword +encrypted_password"
+      "+salt +hashedPassword"
     ).exec();
   }
 });

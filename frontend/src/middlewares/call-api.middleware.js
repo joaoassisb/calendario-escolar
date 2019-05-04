@@ -3,7 +3,6 @@ export function callAPIMiddleware({ dispatch, getState }) {
     const { types, callAPI, shouldCallAPI = () => true, payload = {} } = action;
 
     if (!types) {
-      // Normal action: pass it on
       return next(action);
     }
 

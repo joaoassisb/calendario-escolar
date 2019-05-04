@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter, Redirect } from "react-router-dom";
 import qs from "query-string";
 
 import { login } from "./auth.redux";
@@ -13,7 +13,8 @@ class LoginUsuarioPage extends Component {
     this.state = {
       email: "",
       senha: "",
-      error: false
+      error: false,
+      logged: false
     };
   }
   componentDidUpdate() {
@@ -44,16 +45,22 @@ class LoginUsuarioPage extends Component {
 
     const { email, senha } = this.state;
 
-    this.props
-      .login({
+    return fetch("/api/session", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
         email,
         password: senha
       })
-      .catch(err => {
-        this.setState({
-          error: "Credenciais inválidas"
-        });
+    }).then(() => {
+      console.log("logged");
+      this.setState({
+        logged: true
       });
+    });
   }
 
   fecharMsgErro() {
@@ -72,6 +79,10 @@ class LoginUsuarioPage extends Component {
   }
 
   render() {
+    if (this.state.logged) {
+      return <Redirect to="/eventos" />;
+    }
+
     return (
       <div className="login-usuario-page mt-5">
         <div className="row">
@@ -153,13 +164,15 @@ LoginUsuarioPage.propTypes = {
   urlQuery: PropTypes.object
 };
 
-export default connect(
-  (state, props) => ({
-    session: state.session,
-    urlQuery: qs.parse(props.location.search)
-  }),
-  {
-    login,
-    navigate
-  }
-)(LoginUsuarioPage);
+export default withRouter(
+  connect(
+    (state, props) => ({
+      session: state.session,
+      urlQuery: qs.parse(props.location.search)
+    }),
+    {
+      login,
+      navigate
+    }
+  )(LoginUsuarioPage)
+);

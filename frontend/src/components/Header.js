@@ -28,7 +28,7 @@ class Header extends Component {
 
         <ul className="navbar-nav px-3">
           <li className="nav-item text-nowrap">
-            <a className="nav-link" href="" onClick={e => this.logout(e)}>
+            <a className="nav-link disabled" href="">
               <FontAwesomeIcon icon={faSignOutAlt} size="lg" />
             </a>
           </li>

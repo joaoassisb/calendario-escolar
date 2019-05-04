@@ -13,7 +13,6 @@ router
     api
       .query(req.query)
       .then(eventos => {
-        console.log(eventos);
         res.send(eventos);
       })
       .catch(next);

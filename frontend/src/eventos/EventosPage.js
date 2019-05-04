@@ -54,55 +54,58 @@ class EventosPage extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Teste api Eventos</h1>
+      <div className="col-md-6 offset-md-3 mt-4">
+        <h1>Adicionar Evento</h1>
         <form onSubmit={e => this.handleSubmit(e)}>
-          <div>
-            <label>
-              Nome:
-              <input
-                type="text"
-                name="nome"
-                value={this.state.nome}
-                onChange={e => this.handleChange(e)}
-              />
-            </label>
+          <div className="form-group">
+            <label>Nome:</label>
+            <input
+              type="text"
+              name="nome"
+              value={this.state.nome}
+              onChange={e => this.handleChange(e)}
+              className="form-control"
+            />
           </div>
 
-          <div>
-            <label>
-              Tipo:
-              <select
-                name="tipo"
-                value={this.state.tipo}
-                onChange={e => this.handleChange(e)}
-              >
-                <option value="">Selecione um tipo</option>
-                <option value="Prova">Prova</option>
-                <option value="Atividade">Atividade</option>
-              </select>
-            </label>
+          <div className="form-group">
+            <label>Tipo:</label>
+            <select
+              name="tipo"
+              value={this.state.tipo}
+              onChange={e => this.handleChange(e)}
+              className="form-control"
+            >
+              <option value="">Selecione um tipo</option>
+              <option value="Prova">Prova</option>
+              <option value="Atividade">Atividade</option>
+            </select>
           </div>
 
-          <div>
-            <label>
-              Data:
-              <input
-                type="date"
-                name="data"
-                value={this.state.data}
-                onChange={e => this.handleChange(e)}
-              />
-            </label>
+          <div className="form-group">
+            <label>Data:</label>
+            <input
+              type="date"
+              name="data"
+              value={this.state.data}
+              onChange={e => this.handleChange(e)}
+              className="form-control"
+            />
           </div>
-          <input type="submit" />
+
+          <div className="text-center mb-4">
+            <button className="btn btn-success" type="submit">
+              Salvar
+            </button>
+          </div>
         </form>
 
         <div>
-          <ul>
+          <h1>Eventos</h1>
+          <ul className="list-group">
             {this.state.eventos &&
               this.state.eventos.map(evento => (
-                <li key={evento._id}>
+                <li key={evento._id} className="list-group-item">
                   {formatDate(evento.data)} - {evento.nome} ({evento.tipo})
                 </li>
               ))}
