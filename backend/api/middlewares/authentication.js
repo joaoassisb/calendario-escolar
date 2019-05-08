@@ -32,10 +32,6 @@ function setupPassport(userModelName, strategyName) {
               throw createError(401, "Credenciais inválidas");
             }
 
-            if (user.blocked) {
-              throw createError(403, "Usuário bloqueado");
-            }
-
             user.userModelName = userModelName;
             next(null, user);
           })

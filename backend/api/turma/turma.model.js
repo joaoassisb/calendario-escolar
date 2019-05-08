@@ -24,7 +24,8 @@ const TurmaSchema = new Schema({
       ref: "Usuario",
       required: true
     }
-  ]
+  ],
+  turmaId: {}
 });
 
 module.exports = mongoose.model("Turma", TurmaSchema, "turmas");

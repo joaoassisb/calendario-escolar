@@ -65,6 +65,7 @@ class EventosPage extends Component {
               value={this.state.nome}
               onChange={e => this.handleChange(e)}
               className="form-control"
+              required
             />
           </div>
 
@@ -75,10 +76,14 @@ class EventosPage extends Component {
               value={this.state.tipo}
               onChange={e => this.handleChange(e)}
               className="form-control"
+              required
             >
               <option value="">Selecione um tipo</option>
               <option value="Prova">Prova</option>
               <option value="Atividade">Atividade</option>
+              <option value="Apresentação/Seminário">
+                Apresentação/Seminário
+              </option>
             </select>
           </div>
 
@@ -90,6 +95,7 @@ class EventosPage extends Component {
               value={this.state.data}
               onChange={e => this.handleChange(e)}
               className="form-control"
+              required
             />
           </div>
 

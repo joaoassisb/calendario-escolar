@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { http } from "../helpers/http";
-import { navigate } from "../helpers/navigate.actions";
+import AuthApi from "./auth.api";
 
 class CadastroUsuarioPage extends Component {
   constructor(props) {
@@ -49,13 +47,9 @@ class CadastroUsuarioPage extends Component {
       password: this.state.senha
     };
 
-    http.post("/api/usuarios", usuario).then(() => {
-      this.voltar();
+    return AuthApi.cadastrarUsuario(usuario).then(() => {
+      this.props.history.push("/");
     });
-  }
-
-  voltar() {
-    this.props.navigate("/");
   }
 
   render() {
@@ -74,7 +68,6 @@ class CadastroUsuarioPage extends Component {
                   name="nome"
                   value={this.state.nome}
                   onChange={e => this.handleChange(e)}
-                  autoFocus
                   required
                   className="form-control"
                 />
@@ -88,7 +81,6 @@ class CadastroUsuarioPage extends Component {
                   name="email"
                   value={this.state.email}
                   onChange={e => this.handleChange(e)}
-                  autoFocus
                   required
                   className="form-control"
                 />
@@ -145,9 +137,4 @@ CadastroUsuarioPage.propTypes = {
   navigate: PropTypes.func
 };
 
-export default connect(
-  null,
-  {
-    navigate
-  }
-)(CadastroUsuarioPage);
+export default CadastroUsuarioPage;

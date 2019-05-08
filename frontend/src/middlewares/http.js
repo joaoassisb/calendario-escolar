@@ -3,13 +3,28 @@ import fetch from "cross-fetch";
 import { stringify } from "query-string";
 
 function _http(url, options) {
-  return fetch(url, {
+  const data = {
     method: options.method,
-    body: JSON.stringify(options.body),
-    headers: {
+    body: options.body
+  };
+
+  if (!options.isFormData) {
+    data.body = JSON.stringify(options.body);
+    data.headers = {
       "Content-Type": "application/json"
+    };
+  }
+
+  return fetch(url, data).then(res => {
+    if (res.status >= 400) {
+      return res.text().then(message => {
+        const err = new Error(message);
+
+        err.status = res.status;
+        throw err;
+      });
     }
-  }).then(res => {
+
     return res
       .json()
       .catch(err => {
@@ -32,6 +47,21 @@ function _http(url, options) {
 }
 
 export const http = {
+  auto({ url, method, body, isFormData }) {
+    switch (method) {
+      case "POST":
+        return this.post(url, body, { isFormData });
+
+      case "PUT":
+        return this.put(url, body);
+
+      case "DELETE":
+        return this.delete(url);
+
+      default:
+        return this.get(url, body);
+    }
+  },
   get(url, query) {
     const q = stringify(query);
 
@@ -39,9 +69,10 @@ export const http = {
       method: "GET"
     });
   },
-  post(url, body) {
+  post(url, body, { isFormData = false } = {}) {
     return _http(url, {
       method: "POST",
+      isFormData,
       body
     });
   },

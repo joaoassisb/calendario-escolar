@@ -1,26 +1,15 @@
 import React from "react";
 import { hydrate } from "react-dom";
-import { Provider } from "react-redux";
-import createHistory from "history/createBrowserHistory";
-import { ConnectedRouter } from "react-router-redux";
+
+import { BrowserRouter as Router } from "react-router-dom";
 
 import App from "./components/App";
-import { getStore } from "./helpers/get-store";
 
-const history = createHistory();
-
-// Grab the state from a global variable injected into the server-generated HTML
-const preloadedState = window.__PRELOADED_STATE__;
-const store = getStore(preloadedState, history);
-
-// Allow the passed state to be garbage-collected
 delete window.__PRELOADED_STATE__;
 
 hydrate(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
-  </Provider>,
+  <Router>
+    <App />
+  </Router>,
   document.getElementById("root")
 );
