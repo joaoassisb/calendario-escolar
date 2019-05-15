@@ -9,14 +9,15 @@ module.exports = {
       filtros = {
         $or: [
           {
-            usuarioCriador: filtros.usuario
+            usuarioCriador: usuario
           },
           {
-            alunos: filtros.usuario
+            alunos: usuario
           }
         ]
       };
     }
+    console.log(filtros);
     return Turma.find(filtros).exec();
   },
   create(data, usuario) {

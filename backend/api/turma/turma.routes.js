@@ -10,7 +10,10 @@ router
   .route("/turmas")
   .get((req, res, next) => {
     api
-      .query(req.query)
+      .query({
+        ...req.query,
+        usuario: req.user._id
+      })
       .then(turmas => {
         res.send(turmas);
       })
