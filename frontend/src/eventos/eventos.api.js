@@ -4,8 +4,8 @@ const EventosApi = {
   loadEventos(filtros) {
     return http.get("/api/eventos", filtros);
   },
-  createEvento(evento) {
-    return http.post("/api/eventos", evento);
+  saveEvento(id, evento) {
+    return http.post(`/api/eventos/${id || ""}`, evento);
   }
 };
 

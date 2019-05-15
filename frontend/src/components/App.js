@@ -11,6 +11,8 @@ import TurmasPage from "../turmas/TurmasPage";
 import EditarTurma from "../turmas/EditarTurma";
 import DetalhesTurma from "../turmas/DetalhesTurma";
 
+import EditarEventoPage from "../eventos/EditarEventoPage";
+
 import "../styles.scss";
 
 class App extends Component {
@@ -27,6 +29,11 @@ class App extends Component {
             <Route path="/turmas/nova" exact component={EditarTurma} />
             <Route path="/turmas/:id" exact component={DetalhesTurma} />
             <Route path="/turmas/:id/editar" exact component={EditarTurma} />
+            <Route
+              path="/turmas/:id/eventos/novo"
+              exact
+              component={EditarEventoPage}
+            />
           </Switch>
 
           <Footer />

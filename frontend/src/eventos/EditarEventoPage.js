@@ -1,60 +1,67 @@
 import React, { Component } from "react";
 import EventosApi from "./eventos.api";
+import qs from "query-string";
+import { Link } from "react-router-dom";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import faChevronLeft from "@fortawesome/fontawesome-free-solid/faChevronLeft";
 
 class EventosTurma extends Component {
   constructor(props) {
     super(props);
+
+    const { data } = qs.parse(props.location.search) || "";
+
     this.state = {
-      nome: "",
-      data: "",
-      tipo: "",
-      eventos: []
-    };
-  }
-
-  componentDidMount() {
-    this.loadEventos();
-  }
-
-  loadEventos() {
-    EventosApi.loadEventos().then(res => {
-      if (!res) {
-        return;
+      evento: {
+        nome: "",
+        data,
+        tipo: "",
+        turma: props.match.params.id
       }
-      this.setState({
-        ...this.state,
-        eventos: res
-      });
-    });
+    };
   }
 
   handleChange(e) {
     this.setState({
-      ...this.state,
-      [e.target.name]: e.target.value
+      evento: {
+        ...this.state.evento,
+        [e.target.name]: e.target.value
+      }
     });
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    EventosApi.createEvento({
-      nome: this.state.nome,
-      data: this.state.data,
-      tipo: this.state.tipo
-    }).then(() => this.loadEventos());
+    EventosApi.saveEvento(this.state.evento._id, this.state.evento).then(() => {
+      this.props.history.push();
+    });
+  }
+
+  getBackUrl() {
+    return `/turmas/${this.props.match.params.id}/`;
   }
 
   render() {
     return (
       <div className="col-md-6 offset-md-3 mt-4">
-        <h1>Adicionar Evento</h1>
+        <div className="d-flex justify-content-between">
+          <Link to={this.getBackUrl()}>
+            <h3>
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </h3>
+          </Link>
+
+          <h1>Adicionar Evento</h1>
+          <span />
+        </div>
         <form onSubmit={e => this.handleSubmit(e)}>
           <div className="form-group">
             <label>Nome:</label>
             <input
               type="text"
               name="nome"
-              value={this.state.nome}
+              value={this.state.evento.nome}
               onChange={e => this.handleChange(e)}
               className="form-control"
               required
@@ -65,7 +72,7 @@ class EventosTurma extends Component {
             <label>Tipo:</label>
             <select
               name="tipo"
-              value={this.state.tipo}
+              value={this.state.evento.tipo}
               onChange={e => this.handleChange(e)}
               className="form-control"
               required
@@ -84,7 +91,7 @@ class EventosTurma extends Component {
             <input
               type="date"
               name="data"
-              value={this.state.data}
+              value={this.state.evento.data}
               onChange={e => this.handleChange(e)}
               className="form-control"
               required
@@ -97,31 +104,9 @@ class EventosTurma extends Component {
             </button>
           </div>
         </form>
-
-        <div>
-          <h1>Eventos</h1>
-          <ul className="list-group">
-            {this.state.eventos &&
-              this.state.eventos.map(evento => (
-                <li key={evento._id} className="list-group-item">
-                  {formatDate(evento.data)} - {evento.nome} ({evento.tipo})
-                </li>
-              ))}
-          </ul>
-        </div>
       </div>
     );
   }
 }
 
 export default EventosTurma;
-
-function formatDate(value) {
-  if (!value) {
-    return "";
-  }
-
-  const [ano, mes, dia] = value.split("-");
-
-  return `${dia}/${mes}/${ano}`;
-}

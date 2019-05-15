@@ -8,7 +8,6 @@ const router = express.Router();
 
 router
   .route("/turmas")
-  .all(autho.requiresLocalLogin)
   .get((req, res, next) => {
     api
       .query(req.query)
@@ -19,7 +18,7 @@ router
   })
   .post((req, res, next) => {
     api
-      .create(req.body, req.user._id)
+      .create(req.body, req.user)
       .then(turmas => {
         res.send(turmas);
       })
@@ -36,7 +35,6 @@ router.param("turmaId", (req, res, next, id) => {
 });
 router
   .route("/turmas/:turmaId")
-  .all(autho.requiresLocalLogin)
   .get((req, res) => {
     res.send(req.turma);
   })

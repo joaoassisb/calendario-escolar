@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import TurmasApi from "./turmas.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import faChevronLeft from "@fortawesome/fontawesome-free-solid/faChevronLeft";
+import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
+import faPlus from "@fortawesome/fontawesome-free-solid/faPlus";
+import faTrash from "@fortawesome/fontawesome-free-solid/faTrash";
 
 class LoginUsuarioPage extends Component {
   constructor(props) {
@@ -11,7 +14,9 @@ class LoginUsuarioPage extends Component {
     this.state = {
       turma: {
         nome: "",
-        _id: null
+        materias: [],
+        _id: null,
+        nomeMateria: ""
       }
     };
   }
@@ -19,13 +24,18 @@ class LoginUsuarioPage extends Component {
   componentDidMount() {
     const { id } = this.props.match.params;
     if (id) {
+      this.setState({
+        ...this.state,
+        isLoading: true
+      });
       TurmasApi.loadTurma(id).then(res => {
         if (!res) {
           return;
         }
 
         this.setState({
-          turma: res
+          turma: res,
+          isLoading: false
         });
       });
     }
@@ -51,7 +61,49 @@ class LoginUsuarioPage extends Component {
     });
   }
 
+  incluirMateria() {
+    const { materias, nomeMateria } = this.state.turma;
+
+    if (!nomeMateria || nomeMateria === "") {
+      alert("Insira o nome da matéria para adicioná-la a turma");
+    }
+
+    materias.push({
+      nome: nomeMateria
+    });
+
+    this.setState({
+      turma: {
+        ...this.state.turma,
+        nomeMateria: "",
+        materias
+      }
+    });
+  }
+
+  removerMateria(index) {
+    const { materias } = this.state.turma;
+
+    materias.splice(index, 1);
+
+    this.setState({
+      turma: {
+        ...this.state.turma,
+        materias
+      }
+    });
+  }
+
   render() {
+    if (this.state.isLoading) {
+      return (
+        <div className="text-center mt-5">
+          <h4 className="mr-2">
+            <FontAwesomeIcon icon={faCircleNotch} fixedWidth spin />
+          </h4>
+        </div>
+      );
+    }
     return (
       <div className="editar-turma-page mt-5 container">
         <div className="d-flex justify-content-between">
@@ -80,6 +132,53 @@ class LoginUsuarioPage extends Component {
               required
               className="form-control"
             />
+          </div>
+
+          <label htmlFor="nome">Matérias</label>
+          <div className="mb-4">
+            <ul className="list-group">
+              {this.state.turma.materias.map((materia, index) => (
+                <li
+                  className="list-group-item d-flex justify-content-between"
+                  key={index}
+                >
+                  <span>{materia.nome}</span>
+
+                  <button
+                    className="btn btn-danger"
+                    type="button"
+                    onClick={() => this.removerMateria(index)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </li>
+              ))}
+              {this.state.turma.materias.length === 0 && (
+                <li className="list-group-item italico ">
+                  Nenhuma matéria adicionada ainda.
+                </li>
+              )}
+            </ul>
+          </div>
+          <div className="input-group mb-3">
+            <input
+              id="nomeMateria"
+              type="text"
+              name="nomeMateria"
+              placeholder="Nome da matéria"
+              value={this.state.turma.nomeMateria}
+              onChange={e => this.handleChange(e)}
+              className="form-control"
+            />
+            <div className="input-group-append">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => this.incluirMateria()}
+              >
+                <FontAwesomeIcon icon={faPlus} />
+              </button>
+            </div>
           </div>
 
           <div className="text-center mt-5">

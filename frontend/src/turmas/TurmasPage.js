@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import TurmasApi from "./turmas.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import faPlus from "@fortawesome/fontawesome-free-solid/faPlus";
+import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
 
 class TurmasPage extends Component {
   constructor(props) {
@@ -22,6 +23,10 @@ class TurmasPage extends Component {
   }
 
   loadTurmas() {
+    this.setState({
+      isLoading: true
+    });
+
     TurmasApi.loadTurmas().then(res => {
       if (!res) {
         return;
@@ -29,12 +34,22 @@ class TurmasPage extends Component {
 
       this.setState({
         ...this.state,
-        turmas: res
+        turmas: res,
+        isLoading: false
       });
     });
   }
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <div className="text-center mt-4">
+          <h4 className="mr-2">
+            <FontAwesomeIcon icon={faCircleNotch} fixedWidth spin />
+          </h4>
+        </div>
+      );
+    }
     return (
       <div className="container mt-4">
         <div className="d-flex justify-content-between">

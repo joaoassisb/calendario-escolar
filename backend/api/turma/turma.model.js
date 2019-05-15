@@ -25,7 +25,11 @@ const TurmaSchema = new Schema({
       required: true
     }
   ],
-  turmaId: {}
+  materias: [
+    {
+      nome: String
+    }
+  ]
 });
 
 module.exports = mongoose.model("Turma", TurmaSchema, "turmas");

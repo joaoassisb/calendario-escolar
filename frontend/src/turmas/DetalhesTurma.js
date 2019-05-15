@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import moment from "moment";
 import { ModalHelper } from "../components/ModalHelper";
 import EventosTurma from "../eventos/EventosTurma";
+import { buildDateString } from "../components/formatters";
 
 import TurmasApi from "./turmas.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,6 +27,10 @@ class TurmasPage extends Component {
   }
 
   loadTurma() {
+    this.setState({
+      isLoading: true
+    });
+
     const { id } = this.props.match.params;
 
     TurmasApi.loadTurma(id).then(res => {
@@ -35,7 +40,8 @@ class TurmasPage extends Component {
 
       this.setState({
         ...this.state,
-        turma: res
+        turma: res,
+        isLoading: false
       });
     });
   }
@@ -49,11 +55,13 @@ class TurmasPage extends Component {
   }
 
   render() {
-    if (!this.state.turma) {
+    if (this.state.isLoading) {
       return (
-        <span className="mr-2">
-          <FontAwesomeIcon icon={faCircleNotch} fixedWidth spin />
-        </span>
+        <div className="text-center mt-4">
+          <h4 className="mr-2">
+            <FontAwesomeIcon icon={faCircleNotch} fixedWidth spin />
+          </h4>
+        </div>
       );
     }
 
@@ -86,6 +94,7 @@ class TurmasPage extends Component {
         <ModalHelper
           isOpen={this.state.modalIsOpen}
           onClose={this.toggleModal.bind(this)}
+          onCloseText="Fechar"
           content={
             <EventosTurma data={this.state.date} turma={this.state.turma._id} />
           }
@@ -94,7 +103,11 @@ class TurmasPage extends Component {
               <h1 className="h2 mb-0">
                 {moment(this.state.date).format("DD/MM/YYYY")}
               </h1>
-              <Link to={`/turmas/${this.state.turma._id}/eventos/novo`}>
+              <Link
+                to={`/turmas/${
+                  this.state.turma._id
+                }/eventos/novo?data=${buildDateString(this.state.date)}`}
+              >
                 <button className="btn btn-success">
                   <FontAwesomeIcon icon={faPlus} />
                 </button>

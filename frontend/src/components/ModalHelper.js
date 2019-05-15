@@ -94,7 +94,7 @@ export class ModalHelper extends Component {
 }
 
 ModalHelper.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   onCloseText: PropTypes.string,
   successText: PropTypes.string,
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),

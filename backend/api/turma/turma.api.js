@@ -29,7 +29,7 @@ module.exports = {
     return turma.save();
   },
   get(id) {
-    return turma.findById(id).then(turma => {
+    return Turma.findById(id).then(turma => {
       if (!turma) {
         throw createError(404, "Turma não encontrada");
       }

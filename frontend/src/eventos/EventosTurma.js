@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import EventosApi from "./eventos.api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
+
+import { buildDateString } from "../components/formatters";
 
 class EventosTurma extends Component {
   constructor(props) {
@@ -14,6 +18,10 @@ class EventosTurma extends Component {
   }
 
   loadEventos() {
+    this.setState({
+      isLoading: true
+    });
+
     EventosApi.loadEventos({
       turma: this.props.turma,
       data: buildDateString(this.props.data)
@@ -24,54 +32,36 @@ class EventosTurma extends Component {
 
       this.setState({
         ...this.state,
-        eventos: res
+        eventos: res,
+        isLoading: false
       });
     });
   }
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <div className="text-center">
+          <h4 className="mr-2">
+            <FontAwesomeIcon icon={faCircleNotch} fixedWidth spin />
+          </h4>
+        </div>
+      );
+    }
     return (
       <div>
-        Eventos Cadastrados
-        <ul className="list-group">
-          {this.state.eventos &&
-            this.state.eventos.map(evento => (
-              <li key={evento._id} className="list-group-item">
-                {formatDate(evento.data)} - {evento.nome} ({evento.tipo})
-              </li>
-            ))}
-        </ul>
+        {this.state.eventos &&
+          this.state.eventos.map(evento => (
+            <div>
+              {evento.tipo} - {evento.nome}
+            </div>
+          ))}
+        {this.state.eventos.length === 0 && (
+          <div className="italico ">Nenhum evento adicionado ainda.</div>
+        )}
       </div>
     );
   }
 }
 
 export default EventosTurma;
-
-function formatDate(value) {
-  if (!value) {
-    return "";
-  }
-
-  const [ano, mes, dia] = value.split("-");
-
-  return `${dia}/${mes}/${ano}`;
-}
-
-function pad(i) {
-  return (i < 10 ? "0" : "") + i;
-}
-
-function buildDateString(date) {
-  let value = new Date();
-
-  if (date) {
-    value = date;
-  }
-
-  const YYYY = value.getFullYear();
-  const MM = pad(value.getMonth() + 1);
-  const DD = pad(value.getDate());
-
-  return `${YYYY}-${MM}-${DD}`;
-}

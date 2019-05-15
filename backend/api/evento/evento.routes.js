@@ -19,8 +19,7 @@ router
   })
   .post((req, res, next) => {
     api
-      // .create(req.body, req.user._id)
-      .create(req.body)
+      .create(req.body, req.user._id)
       .then(evento => {
         res.send(evento);
       })
