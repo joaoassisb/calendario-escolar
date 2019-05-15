@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import EventosApi from "./eventos.api";
 
-class EventosPage extends Component {
+class EventosTurma extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,17 +17,15 @@ class EventosPage extends Component {
   }
 
   loadEventos() {
-    fetch("/api/eventos")
-      .then(res => res.json())
-      .then(res => {
-        if (!res) {
-          return;
-        }
-        this.setState({
-          ...this.state,
-          eventos: res
-        });
+    EventosApi.loadEventos().then(res => {
+      if (!res) {
+        return;
+      }
+      this.setState({
+        ...this.state,
+        eventos: res
       });
+    });
   }
 
   handleChange(e) {
@@ -38,17 +37,10 @@ class EventosPage extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    fetch("/api/eventos", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        nome: this.state.nome,
-        data: this.state.data,
-        tipo: this.state.tipo
-      })
+    EventosApi.createEvento({
+      nome: this.state.nome,
+      data: this.state.data,
+      tipo: this.state.tipo
     }).then(() => this.loadEventos());
   }
 
@@ -122,7 +114,7 @@ class EventosPage extends Component {
   }
 }
 
-export default EventosPage;
+export default EventosTurma;
 
 function formatDate(value) {
   if (!value) {

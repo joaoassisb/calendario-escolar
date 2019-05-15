@@ -34,7 +34,7 @@ class LoginUsuarioPage extends Component {
       password: senha
     })
       .then(res => {
-        this.props.history.push("/eventos");
+        this.props.history.push("/turmas");
       })
       .catch(err => {
         this.setState({
