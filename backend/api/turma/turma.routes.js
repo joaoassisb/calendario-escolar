@@ -27,6 +27,15 @@ router
       })
       .catch(next);
   });
+
+router.route("/turmas/entrar").post((req, res, next) => {
+  api
+    .entrarTurma(req.body, req.user._id)
+    .then(turma => {
+      res.send(turma);
+    })
+    .catch(next);
+});
 router.param("turmaId", (req, res, next, id) => {
   api
     .get(id)

@@ -9,6 +9,9 @@ const TurmasApi = {
   },
   saveTurma(id, turma) {
     return http.post(`/api/turmas/${id || ""}`, turma);
+  },
+  entrarTurma(codigo) {
+    return http.post("/api/turmas/entrar", codigo);
   }
 };
 

@@ -20,6 +20,17 @@ module.exports = {
     console.log(filtros);
     return Turma.find(filtros).exec();
   },
+  entrar(turma, usuarioId) {
+    Turma.findOne(turma).then(turma => {
+      if (!turma) {
+        return;
+      }
+
+      turma.alunos.push(usuarioId);
+
+      return turma.save();
+    });
+  },
   create(data, usuario) {
     const turma = new Turma({
       ...data,
