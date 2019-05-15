@@ -50,14 +50,57 @@ class EventosTurma extends Component {
     }
     return (
       <div>
-        {this.state.eventos &&
-          this.state.eventos.map(evento => (
-            <div>
-              {evento.tipo} - {evento.nome}
-            </div>
-          ))}
-        {this.state.eventos.length === 0 && (
+        {this.state.eventos.length === 0 ? (
           <div className="italico ">Nenhum evento adicionado ainda.</div>
+        ) : (
+          <ul className="list-group">
+            <li className="list-group-item">
+              <div className="row">
+                <div className="col-3">
+                  <span>
+                    <strong>Tipo</strong>
+                  </span>
+                </div>
+                <div className="col-3">
+                  <span>
+                    <strong>Matéria</strong>
+                  </span>
+                </div>
+                <div className="col-3 text-center">
+                  <span>
+                    <strong>Nome</strong>
+                  </span>
+                </div>
+                <div className="col-3 text-right">
+                  <span>
+                    <strong>Pontos</strong>
+                  </span>
+                </div>
+              </div>
+            </li>
+            {this.state.eventos.map(evento => (
+              <a
+                key={evento._id}
+                className="list-group-item list-group-item-action"
+                href={`/turmas/${this.props.turma}/eventos/${evento._id}`}
+              >
+                <div className="row">
+                  <div className="col-3">
+                    <span>{evento.tipo}</span>
+                  </div>
+                  <div className="col-3">
+                    <span>{evento.materia}</span>
+                  </div>
+                  <div className="col-3 text-center">
+                    <span>{evento.nome}</span>
+                  </div>
+                  <div className="col-3 text-right">
+                    <span>{evento.pontos || "-"}</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </ul>
         )}
       </div>
     );

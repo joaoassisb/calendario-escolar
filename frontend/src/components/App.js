@@ -12,6 +12,7 @@ import EditarTurma from "../turmas/EditarTurma";
 import DetalhesTurma from "../turmas/DetalhesTurma";
 
 import EditarEventoPage from "../eventos/EditarEventoPage";
+import DetalhesEventos from "../eventos/DetalhesEventos";
 
 import "../styles.scss";
 
@@ -30,7 +31,17 @@ class App extends Component {
             <Route path="/turmas/:id" exact component={DetalhesTurma} />
             <Route path="/turmas/:id/editar" exact component={EditarTurma} />
             <Route
-              path="/turmas/:id/eventos/novo"
+              path="/turmas/:turmaId/eventos/novo"
+              exact
+              component={EditarEventoPage}
+            />
+            <Route
+              path="/turmas/:turmaId/eventos/:id"
+              exact
+              component={DetalhesEventos}
+            />
+            <Route
+              path="/turmas/:turmaId/eventos/:id/editar"
               exact
               component={EditarEventoPage}
             />

@@ -36,9 +36,16 @@ router.param("eventoId", (req, res, next, id) => {
 });
 router
   .route("/eventos/:eventoId")
-  // .all(autho.requiresLocalLogin)
   .get((req, res) => {
     res.send(req.evento);
+  })
+  .post((req, res, next) => {
+    api
+      .update(req.evento, req.body)
+      .then(evento => {
+        res.send(evento);
+      })
+      .catch(next);
   })
   .delete((req, res, next) => {
     api

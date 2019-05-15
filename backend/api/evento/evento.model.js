@@ -27,6 +27,9 @@ const EventoSchema = new Schema({
     type: String,
     enum: ["Prova", "Atividade", "Apresentação/Seminário"]
   },
+  pontos: {
+    type: Number
+  },
   materia: {
     type: String,
     required: true

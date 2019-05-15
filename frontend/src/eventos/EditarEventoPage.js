@@ -4,7 +4,9 @@ import qs from "query-string";
 import { Link } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
 import faChevronLeft from "@fortawesome/fontawesome-free-solid/faChevronLeft";
+import TurmasApi from "../turmas/turmas.api";
 
 class EventosTurma extends Component {
   constructor(props) {
@@ -17,9 +19,61 @@ class EventosTurma extends Component {
         nome: "",
         data,
         tipo: "",
+        materia: "",
+        pontos: "",
         turma: props.match.params.id
+      },
+      turma: {
+        materias: []
       }
     };
+  }
+
+  componentDidMount() {
+    const { turmaId, id } = this.props.match.params;
+    this.loadTurma(turmaId);
+
+    if (id) {
+      this.loadEvento(id);
+    }
+  }
+
+  loadTurma(turmaId) {
+    this.setState({
+      isLoading: true
+    });
+
+    TurmasApi.loadTurma(turmaId).then(res => {
+      if (!res) {
+        return;
+      }
+
+      this.setState({
+        ...this.state,
+        turma: res,
+        isLoading: false
+      });
+    });
+  }
+
+  loadEvento() {
+    this.setState({
+      isLoading: true
+    });
+
+    const { id } = this.props.match.params;
+
+    EventosApi.loadEvento(id).then(res => {
+      if (!res) {
+        return;
+      }
+
+      this.setState({
+        ...this.state,
+        evento: res,
+        isLoading: false
+      });
+    });
   }
 
   handleChange(e) {
@@ -34,15 +88,27 @@ class EventosTurma extends Component {
   handleSubmit(e) {
     e.preventDefault();
     EventosApi.saveEvento(this.state.evento._id, this.state.evento).then(() => {
-      this.props.history.push();
+      this.props.history.push(this.getBackUrl());
     });
   }
 
   getBackUrl() {
-    return `/turmas/${this.props.match.params.id}/`;
+    const { id, turmaId } = this.props.match.params;
+
+    return `/turmas/${turmaId}${id ? `/eventos/${id}` : ""}`;
   }
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <div className="text-center mt-4">
+          <h4 className="mr-2">
+            <FontAwesomeIcon icon={faCircleNotch} fixedWidth spin />
+          </h4>
+        </div>
+      );
+    }
+
     return (
       <div className="col-md-6 offset-md-3 mt-4">
         <div className="d-flex justify-content-between">
@@ -57,7 +123,19 @@ class EventosTurma extends Component {
         </div>
         <form onSubmit={e => this.handleSubmit(e)}>
           <div className="form-group">
-            <label>Nome:</label>
+            <label>Data* :</label>
+            <input
+              type="date"
+              name="data"
+              value={this.state.evento.data}
+              onChange={e => this.handleChange(e)}
+              className="form-control"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Nome*:</label>
             <input
               type="text"
               name="nome"
@@ -69,7 +147,25 @@ class EventosTurma extends Component {
           </div>
 
           <div className="form-group">
-            <label>Tipo:</label>
+            <label>Matéria*:</label>
+            <select
+              name="materia"
+              value={this.state.evento.materia}
+              onChange={e => this.handleChange(e)}
+              className="form-control"
+              required
+            >
+              <option value="">Seleciona uma matéria</option>
+              {this.state.turma.materias.map(materia => (
+                <option key={materia._id} value={materia.nome}>
+                  {materia.nome}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Tipo*:</label>
             <select
               name="tipo"
               value={this.state.evento.tipo}
@@ -87,11 +183,12 @@ class EventosTurma extends Component {
           </div>
 
           <div className="form-group">
-            <label>Data:</label>
+            <label>Pontos:</label>
             <input
-              type="date"
-              name="data"
-              value={this.state.evento.data}
+              type="number"
+              step="0.01"
+              name="pontos"
+              value={this.state.evento.pontos}
               onChange={e => this.handleChange(e)}
               className="form-control"
               required

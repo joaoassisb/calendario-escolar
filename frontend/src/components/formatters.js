@@ -25,3 +25,13 @@ export function buildDateString(date) {
 
   return `${YYYY}-${MM}-${DD}`;
 }
+
+export function dateStr2Locale(value) {
+  if (!value) {
+    return "";
+  }
+
+  const [ano, mes, dia] = value.split("-");
+
+  return `${dia}/${mes}/${ano}`;
+}

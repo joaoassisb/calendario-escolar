@@ -13,7 +13,7 @@ import faChevronLeft from "@fortawesome/fontawesome-free-solid/faChevronLeft";
 import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
 import faPlus from "@fortawesome/fontawesome-free-solid/faPlus";
 
-class TurmasPage extends Component {
+class DetalhesTurma extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -121,4 +121,4 @@ class TurmasPage extends Component {
   }
 }
 
-export default TurmasPage;
+export default DetalhesTurma;
