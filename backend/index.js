@@ -37,7 +37,4 @@ app.use(logger("dev"));
 
 app.use("/api", router);
 
-module.exports = {
-  app: app,
-  port: API_PORT
-};
+app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
