@@ -20,7 +20,8 @@ module.exports = {
     return evento.save();
   },
   get(id) {
-    return Evento.findById(id).then(evento => {
+    return Evento.findById(id)
+    .then(evento => {
       if (!evento) {
         throw createError(404, "Evento não encontrado");
       }

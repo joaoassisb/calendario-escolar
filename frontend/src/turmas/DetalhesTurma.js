@@ -2,17 +2,20 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Calendar from "react-calendar";
 import moment from "moment";
-import { ModalHelper } from "../components/ModalHelper";
-import EventosTurma from "../eventos/EventosTurma";
-import { buildDateString } from "../components/formatters";
-
-import TurmasApi from "./turmas.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import faEdit from "@fortawesome/fontawesome-free-solid/faEdit";
 import faChevronLeft from "@fortawesome/fontawesome-free-solid/faChevronLeft";
 import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
 import faPlus from "@fortawesome/fontawesome-free-solid/faPlus";
 import faCalendarPlus from "@fortawesome/fontawesome-free-solid/faCalendarPlus";
+
+import { ModalHelper } from "../components/ModalHelper";
+import { buildDateString } from "../components/formatters";
+
+import EventosTurma from "../eventos/EventosTurma";
+import { LogsEventos } from "../logs-eventos/LogsEvento";
+
+import TurmasApi from "./turmas.api";
 
 class DetalhesTurma extends Component {
   constructor(props) {
@@ -99,6 +102,10 @@ class DetalhesTurma extends Component {
             onChange={this.toggleModal.bind(this)}
             value={this.state.date}
           />
+        </div>
+
+        <div className="logs my-4">
+          <LogsEventos turma={this.state.turma._id} />
         </div>
 
         <ModalHelper

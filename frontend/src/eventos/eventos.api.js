@@ -1,4 +1,5 @@
 import { http } from "../middlewares/http";
+import LogsEventosApi from "../logs-eventos/LogsEventos.api";
 
 const EventosApi = {
   loadEventos(filtros) {
@@ -8,7 +9,9 @@ const EventosApi = {
     return http.get(`/api/eventos/${id}`);
   },
   saveEvento(id, evento) {
-    return http.post(`/api/eventos/${id || ""}`, evento);
+    return http.post(`/api/eventos/${id || ""}`, evento).then(evento => {
+      return LogsEventosApi.saveLog(evento);
+    });
   },
   deleteEvento(id) {
     return http.delete(`/api/eventos/${id}`);

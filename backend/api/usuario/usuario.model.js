@@ -15,12 +15,10 @@ const UsuarioSchema = new mongoose.Schema({
     validate: [
       /\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b/,
       "Email inválido"
-    ],
-    toCSV: true
+    ]
   },
-  name: {
-    type: String,
-    toCSV: true
+  nome: {
+    type: String
   },
   hashedPassword: {
     type: String,
@@ -35,9 +33,6 @@ const UsuarioSchema = new mongoose.Schema({
   },
   lastLogin: {
     type: Date
-  },
-  social: {
-    facebook: String
   }
 });
 

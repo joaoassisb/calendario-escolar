@@ -24,8 +24,7 @@ const LogEventosSchema = new Schema({
     ref: "Evento"
   },
   mensagem: {
-    type: String,
-    required: true
+    type: String
   }
 });
 

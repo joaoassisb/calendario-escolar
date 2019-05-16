@@ -2,6 +2,7 @@
 
 const createError = require("http-errors");
 const LogEvento = require("./log-eventos.model");
+const Usuario = require("../usuario/usuario.model");
 
 module.exports = {
   query(filtros) {
@@ -9,26 +10,32 @@ module.exports = {
       throw createError(400, "Informe uma turma para listar suas atividades.");
     }
 
-    return LogEvento.find(filtros).exec();
+    return LogEvento.find(filtros)
+      .populate("usuario evento")
+      .exec();
   },
   create(data, usuario) {
-    const evento = new LogEvento({
+    const log = new LogEvento({
       ...data,
-      usuario: usuario
+      usuario: usuario,
+      data: new Date()
     });
 
-    return evento.save();
+    return Usuario.findById(usuario).then(usuario => {
+      log.mensagem = `${usuario.nome} ${log.mensagem}`;
+      return log.save();
+    });
   },
   get(id) {
-    return evento.findById(id).then(evento => {
-      if (!evento) {
+    return log.findById(id).then(log => {
+      if (!log) {
         throw createError(404, "Log não encontrado");
       }
 
-      return evento;
+      return log;
     });
   },
-  delete(evento) {
-    return evento.remove();
+  delete(log) {
+    return log.remove();
   }
 };

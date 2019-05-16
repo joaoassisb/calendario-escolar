@@ -1,14 +1,12 @@
 "use strict";
 
 const express = require("express");
-//fixme
-// const autho = require("../middlewares/authorization");
+
 const api = require("./evento.api");
 const router = express.Router();
 
 router
   .route("/eventos")
-  // .all(autho.requiresLocalLogin)
   .get((req, res, next) => {
     api
       .query(req.query)

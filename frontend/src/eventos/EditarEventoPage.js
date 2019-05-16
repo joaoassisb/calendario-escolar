@@ -176,6 +176,7 @@ class EventosTurma extends Component {
               <option value="">Selecione um tipo</option>
               <option value="Prova">Prova</option>
               <option value="Atividade">Atividade</option>
+              <option value="Trabalho Prático">Trabalho Prático</option>
               <option value="Apresentação/Seminário">
                 Apresentação/Seminário
               </option>

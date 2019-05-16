@@ -35,3 +35,13 @@ export function dateStr2Locale(value) {
 
   return `${dia}/${mes}/${ano}`;
 }
+
+export function toShortDateTime(value) {
+  if (!value) {
+    return "";
+  }
+
+  const d = new Date(value);
+
+  return `${d.toLocaleDateString()} ${d.toLocaleTimeString().substr(0, 5)}`;
+}

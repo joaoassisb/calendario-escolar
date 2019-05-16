@@ -52,7 +52,7 @@ class LoginUsuarioPage extends Component {
 
   render() {
     return (
-      <div className="login-usuario-page mt-5">
+      <div className="login-usuario-page mt-5 container">
         <div className="row">
           <div className="col-md-6 offset-md-3">
             <h3 className="mb-3 text-center">Acesse sua conta</h3>

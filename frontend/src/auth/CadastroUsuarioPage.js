@@ -54,7 +54,7 @@ class CadastroUsuarioPage extends Component {
 
   render() {
     return (
-      <div className="cadastro-usuario-page my-5">
+      <div className="cadastro-usuario-page my-5 container">
         <div className="row">
           <div className="col-md-6 offset-md-3">
             <h3 className="mb-3 text-center">Cadastre-se </h3>

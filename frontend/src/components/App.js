@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 
 import { Header } from "./Header";
-import Footer from "./Footer";
 
 import LoginUsuarioPage from "../auth/LoginUsuarioPage";
 import CadastroUsuarioPage from "../auth/CadastroUsuarioPage";
@@ -46,8 +45,6 @@ class App extends Component {
               component={EditarEventoPage}
             />
           </Switch>
-
-          <Footer />
         </div>
       </div>
     );
