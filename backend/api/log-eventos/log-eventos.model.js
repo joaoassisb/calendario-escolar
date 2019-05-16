@@ -25,6 +25,10 @@ const LogEventosSchema = new Schema({
   },
   mensagem: {
     type: String
+  },
+  entradaEmTurma: {
+    type: Boolean,
+    defaul: false
   }
 });
 

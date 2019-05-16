@@ -10,11 +10,13 @@ const EventosApi = {
   },
   saveEvento(id, evento) {
     return http.post(`/api/eventos/${id || ""}`, evento).then(evento => {
-      return LogsEventosApi.saveLog(evento);
+      return LogsEventosApi.saveLog(evento, { edicao: id ? true : false });
     });
   },
-  deleteEvento(id) {
-    return http.delete(`/api/eventos/${id}`);
+  deleteEvento(evento) {
+    return http.delete(`/api/eventos/${evento._id}`).then(() => {
+      return LogsEventosApi.saveLog(evento, { exclusao: true });
+    });
   }
 };
 

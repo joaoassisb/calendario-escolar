@@ -12,6 +12,7 @@ module.exports = {
 
     return LogEvento.find(filtros)
       .populate("usuario evento")
+      .sort("-data")
       .exec();
   },
   create(data, usuario) {

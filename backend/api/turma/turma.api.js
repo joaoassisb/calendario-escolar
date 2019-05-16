@@ -2,6 +2,7 @@
 
 const createError = require("http-errors");
 const Turma = require("./turma.model");
+const LogsEventos = require("../log-eventos/log-eventos.model");
 
 module.exports = {
   query({ usuario, ...filtros }) {

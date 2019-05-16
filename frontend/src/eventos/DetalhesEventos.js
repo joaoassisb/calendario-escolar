@@ -55,9 +55,9 @@ class DetalhesEvento extends Component {
   }
 
   excluir() {
-    const { id, turmaId } = this.props.match.params;
+    const { turmaId } = this.props.match.params;
 
-    EventosApi.deleteEvento(id).then(() => {
+    EventosApi.deleteEvento(this.state.evento).then(() => {
       this.props.history.push(`/turmas/${turmaId}`);
     });
   }
