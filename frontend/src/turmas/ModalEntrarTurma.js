@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { ModalHelper } from "../components/ModalHelper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import faSignIn from "@fortawesome/fontawesome-free-solid/faSignInAlt";
+import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
 import TurmasApi from "../turmas/turmas.api";
 
 export class ModalEntrarTurma extends Component {
@@ -9,7 +10,9 @@ export class ModalEntrarTurma extends Component {
     super(props);
     this.state = {
       modalIsOpen: false,
-      codigo: ""
+      codigo: "",
+      error: false,
+      isLoading: false
     };
   }
 
@@ -30,19 +33,72 @@ export class ModalEntrarTurma extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    TurmasApi.entrarTurma(this.state)
+    this.setState({
+      isLoading: true
+    });
+
+    TurmasApi.entrarTurma({
+      codigo: this.state.codigo
+    })
       .then(res => {
-        console.log(res);
-        this.toggleModal();
+        if (Object.keys(res).length > 0) {
+          return this.toggleModal();
+        }
+
+        return this.setState({
+          error: "Código de turma inválido!",
+          modalIsOpen: true,
+          isLoading: false,
+          codigo: ""
+        });
       })
       .catch(err => {
-        alert(err.message);
+        this.setState({
+          error: "Ocorreu um erro, tente novamente mais tarde!",
+          modalIsOpen: true,
+          isLoading: false,
+          codigo: ""
+        });
       });
   }
 
+  fecharMsgErro() {
+    this.setState({
+      ...this.state,
+      error: false
+    });
+  }
+
   renderFormulario() {
+    if (this.state.isLoading) {
+      return (
+        <div className="text-center mt-4">
+          <h4 className="mr-2">
+            <FontAwesomeIcon icon={faCircleNotch} fixedWidth spin />
+          </h4>
+        </div>
+      );
+    }
     return (
       <form onSubmit={e => this.entrarTurma(e)} className="form ">
+        {this.state.error && (
+          <div
+            className="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            {this.state.error}
+            <button
+              type="button"
+              className="close"
+              data-dismiss="alert"
+              aria-label="Close"
+              onClick={this.fecharMsgErro.bind(this)}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        )}
+
         <label htmlFor="codigo">Código</label>
         <div className="input-group mb-3">
           <input

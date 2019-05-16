@@ -45,7 +45,7 @@ class LoginUsuarioPage extends Component {
 
   fecharMsgErro() {
     this.setState({
-      ...this.state.error,
+      ...this.state,
       error: false
     });
   }

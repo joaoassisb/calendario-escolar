@@ -30,7 +30,7 @@ router
 
 router.route("/turmas/entrar").post((req, res, next) => {
   api
-    .entrarTurma(req.body, req.user._id)
+    .entrar(req.body, req.user._id)
     .then(turma => {
       res.send(turma);
     })

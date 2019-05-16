@@ -17,16 +17,16 @@ module.exports = {
         ]
       };
     }
-    console.log(filtros);
+
     return Turma.find(filtros).exec();
   },
   entrar(turma, usuarioId) {
-    Turma.findOne(turma).then(turma => {
+    return Turma.findOne(turma).then(turma => {
       if (!turma) {
         return;
       }
 
-      turma.alunos.push(usuarioId);
+      turma.alunos.addToSet(usuarioId);
 
       return turma.save();
     });
