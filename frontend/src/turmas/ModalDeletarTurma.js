@@ -9,7 +9,10 @@ export class ModalEntrarTurma extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalIsOpen: false
+      modalIsOpen: false,
+      codigo: "",
+      error: false,
+      isLoading: false
     };
   }
 
@@ -39,8 +42,7 @@ export class ModalEntrarTurma extends Component {
     })
       .then(res => {
         if (Object.keys(res).length > 0) {
-          this.toggleModal();
-          return this.props.reloadData();
+          return this.toggleModal();
         }
 
         return this.setState({

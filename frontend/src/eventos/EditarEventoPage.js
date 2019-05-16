@@ -21,7 +21,7 @@ class EventosTurma extends Component {
         tipo: "",
         materia: "",
         pontos: "",
-        turma: props.match.params.id
+        turma: props.match.params.turmaId
       },
       turma: {
         materias: []
@@ -191,7 +191,6 @@ class EventosTurma extends Component {
               value={this.state.evento.pontos}
               onChange={e => this.handleChange(e)}
               className="form-control"
-              required
             />
           </div>
 

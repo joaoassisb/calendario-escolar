@@ -1,27 +1,49 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
-import TurmasApi from "./turmas.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import faPlus from "@fortawesome/fontawesome-free-solid/faPlus";
 import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
+import faTrash from "@fortawesome/fontawesome-free-solid/faTrash";
 import faSearchPlus from "@fortawesome/fontawesome-free-solid/faSearchPlus";
+
+import TurmasApi from "./turmas.api";
+import AuthApi from "../auth/auth.api";
+
 import { ModalEntrarTurma } from "./ModalEntrarTurma";
+import { ModalSairTurma } from "./ModalSairTurma";
 
 class TurmasPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      turmas: []
+      turmas: [],
+      usuario: {}
     };
+
+    this.reloadData = this.reloadData.bind(this);
   }
+
+  reloadData() {
+    this.loadTurmas();
+  }
+
   componentDidMount() {
     this.loadTurmas();
+    this.loadUsuario();
   }
 
   novaTurma(e) {
     e.preventDefault();
     this.props.history.push("/turmas/nova");
+  }
+
+  loadUsuario() {
+    AuthApi.session().then(res => {
+      this.setState({
+        ...this.state,
+        usuario: res.id
+      });
+    });
   }
 
   loadTurmas() {
@@ -64,7 +86,7 @@ class TurmasPage extends Component {
         </div>
 
         <div className="d-flex justify-content-end my-4">
-          <ModalEntrarTurma />
+          <ModalEntrarTurma reloadData={this.reloadData} />
         </div>
 
         <ul className="list-group mt-4">
@@ -96,10 +118,22 @@ class TurmasPage extends Component {
                     <div className="col-4">{turma.codigo}</div>
                     <div className="col-4 text-right">
                       <Link to={`/turmas/${turma._id}`} key={turma._id}>
-                        <button className="btn btn-outline-primary">
+                        <button className="btn btn-outline-primary mr-2">
                           <FontAwesomeIcon icon={faSearchPlus} />
                         </button>
                       </Link>
+
+                      {this.state.usuario === turma.usuarioCriador ? (
+                        <button className="btn btn-outline-danger">
+                          <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                      ) : (
+                        <ModalSairTurma
+                          turma={turma}
+                          aluno={this.state.usuario}
+                          reloadData={this.reloadData}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

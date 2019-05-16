@@ -11,7 +11,10 @@ const TurmasApi = {
     return http.post(`/api/turmas/${id || ""}`, turma);
   },
   entrarTurma(codigo) {
-    return http.post("/api/turmas/entrar", codigo);
+    return http.post("/api/turmas/alunos", codigo);
+  },
+  sair(id, aluno) {
+    return http.post(`/api/turmas/${id}/sair`, aluno);
   }
 };
 

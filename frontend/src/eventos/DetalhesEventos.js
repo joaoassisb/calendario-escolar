@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
-import EventosApi from "./eventos.api";
-import AuthApi from "../auth/auth.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import faEdit from "@fortawesome/fontawesome-free-solid/faEdit";
 import faChevronLeft from "@fortawesome/fontawesome-free-solid/faChevronLeft";
 import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
 import faTrash from "@fortawesome/fontawesome-free-solid/faTrash";
+
+import EventosApi from "./eventos.api";
+import AuthApi from "../auth/auth.api";
+
 import { dateStr2Locale } from "../components/formatters";
 
 class DetalhesEvento extends Component {
@@ -114,7 +115,7 @@ class DetalhesEvento extends Component {
               </div>
             </div>
           </div>
-          {console.log(this.state)}
+
           {this.state.evento.usuarioCriador === this.state.usuario && (
             <div className="card-footer text-center">
               <button

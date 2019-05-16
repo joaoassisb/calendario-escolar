@@ -28,7 +28,7 @@ router
       .catch(next);
   });
 
-router.route("/turmas/entrar").post((req, res, next) => {
+router.route("/turmas/alunos").post((req, res, next) => {
   api
     .entrar(req.body, req.user._id)
     .then(turma => {
@@ -36,6 +36,7 @@ router.route("/turmas/entrar").post((req, res, next) => {
     })
     .catch(next);
 });
+
 router.param("turmaId", (req, res, next, id) => {
   api
     .get(id)
@@ -68,5 +69,14 @@ router
       })
       .catch(next);
   });
+
+router.route("/turmas/:turmaId/sair").post((req, res, next) => {
+  api
+    .sair(req.turma, req.body)
+    .then(turma => {
+      res.send(turma);
+    })
+    .catch(next);
+});
 
 module.exports = router;

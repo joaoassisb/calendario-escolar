@@ -31,6 +31,10 @@ module.exports = {
       return turma.save();
     });
   },
+  sair(turma, { aluno }) {
+    turma.alunos.pull(aluno);
+    return turma.save();
+  },
   create(data, usuario) {
     const turma = new Turma({
       ...data,

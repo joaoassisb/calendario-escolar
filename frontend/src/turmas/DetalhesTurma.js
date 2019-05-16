@@ -12,6 +12,7 @@ import faEdit from "@fortawesome/fontawesome-free-solid/faEdit";
 import faChevronLeft from "@fortawesome/fontawesome-free-solid/faChevronLeft";
 import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
 import faPlus from "@fortawesome/fontawesome-free-solid/faPlus";
+import faCalendarPlus from "@fortawesome/fontawesome-free-solid/faCalendarPlus";
 
 class DetalhesTurma extends Component {
   constructor(props) {
@@ -76,12 +77,21 @@ class DetalhesTurma extends Component {
 
           <h3>Turma {this.state.turma.nome}</h3>
 
-          <Link to={`/turmas/${this.state.turma._id}/editar`}>
-            <button className="btn btn-success">
-              <FontAwesomeIcon icon={faEdit} />
-              <span className="ml-2">Editar Turma</span>
-            </button>
-          </Link>
+          <div>
+            <Link to={`/turmas/${this.state.turma._id}/editar`}>
+              <button className="btn btn-primary mr-2 mb-2">
+                <FontAwesomeIcon icon={faEdit} />
+                <span className="ml-2">Editar Turma</span>
+              </button>
+            </Link>
+
+            <Link to={`/turmas/${this.state.turma._id}/eventos/novo`}>
+              <button className="btn btn-success mb-2">
+                <FontAwesomeIcon icon={faCalendarPlus} />
+                <span className="ml-2">Novo Evento</span>
+              </button>
+            </Link>
+          </div>
         </div>
 
         <div className="calendario my-4">
