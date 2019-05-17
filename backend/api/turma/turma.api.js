@@ -46,13 +46,15 @@ module.exports = {
     return turma.save();
   },
   get(id) {
-    return Turma.findById(id).then(turma => {
-      if (!turma) {
-        throw createError(404, "Turma não encontrada");
-      }
+    return Turma.findById(id)
+      .populate("alunos")
+      .then(turma => {
+        if (!turma) {
+          throw createError(404, "Turma não encontrada");
+        }
 
-      return turma;
-    });
+        return turma;
+      });
   },
   update(turma, data) {
     Object.assign(turma, data);

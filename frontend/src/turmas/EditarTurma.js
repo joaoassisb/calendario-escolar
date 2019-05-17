@@ -16,12 +16,17 @@ class LoginUsuarioPage extends Component {
         nome: "",
         materias: [],
         _id: null,
-        nomeMateria: ""
+        nomeMateria: "",
+        alunos: []
       }
     };
   }
 
   componentDidMount() {
+    this.carregarTurma();
+  }
+
+  carregarTurma() {
     const { id } = this.props.match.params;
     if (id) {
       this.setState({
@@ -105,7 +110,7 @@ class LoginUsuarioPage extends Component {
       );
     }
     return (
-      <div className="editar-turma-page mt-5 container">
+      <div className="editar-turma-page my-5 container">
         <div className="d-flex justify-content-between">
           <Link to="/turmas">
             <h3>
@@ -119,6 +124,20 @@ class LoginUsuarioPage extends Component {
         </div>
 
         <form onSubmit={e => this.criarTurma(e)} className="form mt-5">
+          <div className="form-group">
+            <label htmlFor="nome">Código</label>
+            <input
+              id="codigo"
+              type="text"
+              name="codigo"
+              placeholder="Código automático da turma"
+              value={this.state.turma.codigo}
+              onChange={e => this.handleChange(e)}
+              disabled
+              className="form-control"
+            />
+          </div>
+
           <div className="form-group">
             <label htmlFor="nome">Nome</label>
             <input
@@ -139,7 +158,7 @@ class LoginUsuarioPage extends Component {
             <ul className="list-group">
               {this.state.turma.materias.map((materia, index) => (
                 <li
-                  className="list-group-item d-flex justify-content-between"
+                  className="list-group-item d-flex justify-content-between align-items-center"
                   key={index}
                 >
                   <span>{materia.nome}</span>
@@ -179,6 +198,26 @@ class LoginUsuarioPage extends Component {
                 <FontAwesomeIcon icon={faPlus} />
               </button>
             </div>
+          </div>
+
+          <label htmlFor="nome">Alunos</label>
+          <div className="mb-4">
+            <ul className="list-group">
+              {this.state.turma.alunos.map(aluno => (
+                <li
+                  className="list-group-item d-flex justify-content-between align-items-center"
+                  key={aluno._id}
+                >
+                  <span>{aluno.nome}</span>
+                </li>
+              ))}
+              {this.state.turma.alunos.length === 0 && (
+                <li className="list-group-item italico ">
+                  Nenhum aluno adicionado ainda. Compartilhe o código da turma
+                  para que outros usuários possam entrar na turma.
+                </li>
+              )}
+            </ul>
           </div>
 
           <div className="text-center mt-5">
