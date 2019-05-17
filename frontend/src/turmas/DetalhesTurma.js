@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Calendar from "react-calendar";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import faEdit from "@fortawesome/fontawesome-free-solid/faEdit";
 import faChevronLeft from "@fortawesome/fontawesome-free-solid/faChevronLeft";
 import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
 import faPlus from "@fortawesome/fontawesome-free-solid/faPlus";
@@ -81,13 +80,6 @@ class DetalhesTurma extends Component {
           <h3>Turma {this.state.turma.nome}</h3>
 
           <div>
-            <Link to={`/turmas/${this.state.turma._id}/editar`}>
-              <button className="btn btn-primary mr-2 mb-2">
-                <FontAwesomeIcon icon={faEdit} />
-                <span className="ml-2">Editar Turma</span>
-              </button>
-            </Link>
-
             <Link to={`/turmas/${this.state.turma._id}/eventos/novo`}>
               <button className="btn btn-success mb-2">
                 <FontAwesomeIcon icon={faCalendarPlus} />

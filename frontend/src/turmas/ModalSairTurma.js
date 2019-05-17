@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { ModalHelper } from "../components/ModalHelper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import faSignIn from "@fortawesome/fontawesome-free-solid/faSignInAlt";
 import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
 import faSignOutAlt from "@fortawesome/fontawesome-free-solid/faSignOutAlt";
 
@@ -67,7 +66,7 @@ export class ModalSairTurma extends Component {
     return (
       <React.Fragment>
         <button
-          className="btn btn-outline-danger"
+          className="btn btn-outline-danger mr-2 mb-2"
           onClick={this.toggleModal.bind(this)}
         >
           <FontAwesomeIcon icon={faSignOutAlt} />

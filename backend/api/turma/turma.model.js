@@ -1,6 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
+const createError = require("http-errors");
 const { Schema } = mongoose;
 const { ObjectId } = mongoose.SchemaTypes;
 
@@ -30,7 +31,10 @@ const TurmaSchema = new Schema({
       nome: String
     }
   ],
-  codigo: String
+  codigo: {
+    type: String,
+    unique: true
+  }
 });
 
 TurmaSchema.pre("save", function() {
@@ -40,6 +44,23 @@ TurmaSchema.pre("save", function() {
 
   this.codigo = makeRandomCode(8);
   return;
+});
+
+TurmaSchema.pre("remove", function() {
+  const Evento = this.model("Evento");
+
+  return Evento.countDocuments({
+    turma: this._id
+  }).then(eventos => {
+    if (eventos > 0) {
+      throw createError(
+        412,
+        "Turma não pode ser excluída porque possui eventos cadastrados"
+      );
+    }
+
+    return;
+  });
 });
 
 function makeRandomCode(length) {

@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 const sessionMiddleware = require("./middlewares/session");
 const authMiddleware = require("./middlewares/authentication");
 const autho = require("./middlewares/authorization");
+const errorMiddleware = require("./middlewares/error-handler");
 
 const routes = express.Router();
 const session = {
@@ -28,7 +29,7 @@ authMiddleware(routes, {
 
 routes.use(require(`${__dirname}/usuario/usuario.routes.js`));
 
-// routes.use(autho.requiresLocalLogin);
+routes.use(errorMiddleware);
 
 glob.sync(`${__dirname}/**/*.routes.js`).forEach(filename => {
   routes.use(require(filename));

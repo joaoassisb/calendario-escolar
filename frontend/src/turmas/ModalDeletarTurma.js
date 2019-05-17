@@ -1,18 +1,16 @@
 import React, { Component } from "react";
 import { ModalHelper } from "../components/ModalHelper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import faSignIn from "@fortawesome/fontawesome-free-solid/faSignInAlt";
 import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
+import faTrash from "@fortawesome/fontawesome-free-solid/faTrash";
+
 import TurmasApi from "../turmas/turmas.api";
 
-export class ModalEntrarTurma extends Component {
+export class ModalDeletarTurma extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalIsOpen: false,
-      codigo: "",
-      error: false,
-      isLoading: false
+      modalIsOpen: false
     };
   }
 
@@ -22,39 +20,29 @@ export class ModalEntrarTurma extends Component {
     });
   }
 
-  handleChange({ target }) {
-    this.setState({
-      ...this.state.turma,
-      [target.name]: target.value
-    });
-  }
-
-  entrarTurma(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
+  excluirTurma() {
     this.setState({
       isLoading: true
     });
 
-    TurmasApi.entrarTurma({
-      codigo: this.state.codigo
-    })
+    TurmasApi.deleteTurma(this.props.turma._id)
       .then(res => {
-        if (Object.keys(res).length > 0) {
-          return this.toggleModal();
-        }
-
-        return this.setState({
-          error: "Código de turma inválido!",
-          modalIsOpen: true,
-          isLoading: false,
-          codigo: ""
-        });
+        this.toggleModal();
+        return this.props.reloadData();
       })
       .catch(err => {
+        let error = "Ocorreu um erro, tente novamente mais tarde!";
+        if (
+          err.message.match(
+            /Turma não pode ser excluída porque possui eventos cadastrados/
+          )
+        ) {
+          error =
+            "Turma não pode ser excluída porque possui eventos cadastrados.";
+        }
+
         this.setState({
-          error: "Ocorreu um erro, tente novamente mais tarde!",
+          error,
           modalIsOpen: true,
           isLoading: false,
           codigo: ""
@@ -80,7 +68,7 @@ export class ModalEntrarTurma extends Component {
       );
     }
     return (
-      <form onSubmit={e => this.entrarTurma(e)} className="form ">
+      <div>
         {this.state.error && (
           <div
             className="alert alert-danger alert-dismissible fade show"
@@ -98,25 +86,9 @@ export class ModalEntrarTurma extends Component {
             </button>
           </div>
         )}
-
-        <label htmlFor="codigo">Código</label>
-        <div className="input-group mb-3">
-          <input
-            id="codigo"
-            type="text"
-            name="codigo"
-            placeholder="Digite o código da turma"
-            value={this.state.codigo}
-            onChange={e => this.handleChange(e)}
-            className="form-control"
-          />
-          <div className="input-group-append">
-            <button className="btn btn-outline-primary" type="submit">
-              <FontAwesomeIcon icon={faSignIn} />
-            </button>
-          </div>
-        </div>
-      </form>
+        Deseja mesmo excluir a turma {this.props.turma.nome}? Essa ação não
+        poderá ser desfeita.
+      </div>
     );
   }
 
@@ -124,18 +96,20 @@ export class ModalEntrarTurma extends Component {
     return (
       <React.Fragment>
         <button
-          className="btn btn-primary"
+          className="btn btn-outline-danger mr-2 mb-2"
           onClick={this.toggleModal.bind(this)}
         >
-          <FontAwesomeIcon icon={faSignIn} />
-          <span className="ml-2">Entrar em uma Turma</span>
+          <FontAwesomeIcon icon={faTrash} />
         </button>
+
         <ModalHelper
           isOpen={this.state.modalIsOpen}
+          success={this.excluirTurma.bind(this)}
+          successText="Excluir"
           onClose={this.toggleModal.bind(this)}
           onCloseText="Fechar"
           content={this.renderFormulario()}
-          title={<h2>Entrar em uma turma</h2>}
+          title={<h2>Confirmação de exclusão</h2>}
           size="lg"
         />
       </React.Fragment>

@@ -10,6 +10,9 @@ const TurmasApi = {
   saveTurma(id, turma) {
     return http.post(`/api/turmas/${id || ""}`, turma);
   },
+  deleteTurma(id) {
+    return http.delete(`/api/turmas/${id}`);
+  },
   entrarTurma(codigo) {
     return http.post("/api/turmas/alunos", codigo).then(turma => {
       const log = {

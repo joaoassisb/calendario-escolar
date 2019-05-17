@@ -3,14 +3,15 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import faPlus from "@fortawesome/fontawesome-free-solid/faPlus";
 import faCircleNotch from "@fortawesome/fontawesome-free-solid/faCircleNotch";
-import faTrash from "@fortawesome/fontawesome-free-solid/faTrash";
 import faSearchPlus from "@fortawesome/fontawesome-free-solid/faSearchPlus";
+import faEdit from "@fortawesome/fontawesome-free-solid/faEdit";
 
 import TurmasApi from "./turmas.api";
 import AuthApi from "../auth/auth.api";
 
 import { ModalEntrarTurma } from "./ModalEntrarTurma";
 import { ModalSairTurma } from "./ModalSairTurma";
+import { ModalDeletarTurma } from "./ModalDeletarTurma";
 
 class TurmasPage extends Component {
   constructor(props) {
@@ -118,15 +119,24 @@ class TurmasPage extends Component {
                     <div className="col-4">{turma.codigo}</div>
                     <div className="col-4 text-right">
                       <Link to={`/turmas/${turma._id}`} key={turma._id}>
-                        <button className="btn btn-outline-primary mr-2">
+                        <button className="btn btn-outline-primary mr-2 mb-2">
                           <FontAwesomeIcon icon={faSearchPlus} />
                         </button>
                       </Link>
+                      {this.state.usuario === turma.usuarioCriador && (
+                        <Link to={`/turmas/${turma._id}/editar`}>
+                          <button className="btn btn-outline-info mr-2 mb-2">
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                        </Link>
+                      )}
 
                       {this.state.usuario === turma.usuarioCriador ? (
-                        <button className="btn btn-outline-danger">
-                          <FontAwesomeIcon icon={faTrash} />
-                        </button>
+                        <ModalDeletarTurma
+                          turma={turma}
+                          aluno={this.state.usuario}
+                          reloadData={this.reloadData}
+                        />
                       ) : (
                         <ModalSairTurma
                           turma={turma}
