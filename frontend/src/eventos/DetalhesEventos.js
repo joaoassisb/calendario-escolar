@@ -9,6 +9,7 @@ import EventosApi from "./eventos.api";
 import AuthApi from "../auth/auth.api";
 import { ModalDeletarTurma } from "./ModalDeletarEvento";
 import { dateStr2Locale } from "../components/formatters";
+import { ComentariosEvento } from "../comentarios/ComentariosEvento";
 
 class DetalhesEvento extends Component {
   constructor(props) {
@@ -134,6 +135,13 @@ class DetalhesEvento extends Component {
               </Link>
             </div>
           )}
+        </div>
+
+        <div className="comentarios my-4">
+          <ComentariosEvento
+            evento={this.state.evento}
+            usuario={this.state.usuario}
+          />
         </div>
       </div>
     );

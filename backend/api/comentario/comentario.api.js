@@ -5,21 +5,12 @@ const Comentario = require("./comentario.model");
 
 module.exports = {
   query(filtros) {
-    return Promise.all([
-      Comentario.find(filtros)
-        .populate("usuario", "name")
-        .exec(),
-      Comentario.countDocuments(filtros).exec()
-    ]).then(([result, total]) => ({
-      total,
-      result
-    }));
+    return Comentario.find(filtros)
+      .populate("usuario evento")
+      .exec();
   },
-  create(data, usuario) {
-    const comentario = new Comentario({
-      ...data,
-      usuario
-    });
+  create(data) {
+    const comentario = new Comentario(data);
 
     return comentario.save();
   },

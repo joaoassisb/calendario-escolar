@@ -19,7 +19,7 @@ const ComentarioSchema = new Schema({
     ref: "Usuario",
     required: true
   },
-  documento: {
+  evento: {
     type: ObjectId,
     ref: "Evento",
     required: true
