@@ -42,7 +42,9 @@ export class ComentariosEvento extends Component {
   }
 
   excluir(comentario) {
-    ComentarioApi.deleteEvento(comentario);
+    ComentarioApi.deleteEvento(comentario).then(() => {
+      this.carregarComentarios();
+    });
   }
 
   editar(comentario) {
@@ -56,6 +58,7 @@ export class ComentariosEvento extends Component {
 
   aoSalvar() {
     setTimeout(() => {
+      this.carregarComentarios();
       this.fecharEdicao(() => {});
     }, 0);
   }
@@ -150,7 +153,7 @@ export class ComentariosEvento extends Component {
             comentario={{}}
             eventoId={this.props.evento._id}
             aoSalvar={this.aoSalvar.bind(this)}
-            cancelar={function() {}}
+            cancelar={this.fecharEdicao.bind(this)}
           />
 
           <div className="mt-5 comentarios">
