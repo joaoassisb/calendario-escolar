@@ -17,7 +17,19 @@ app.use("/api", api);
 const dbRoute =
   "mongodb://joao:joao123@ds064748.mlab.com:64748/calendario-escolar";
 
-mongoose.connect(dbRoute, { useNewUrlParser: true });
+mongoose.connect(dbRoute, {
+  autoReconnect: true,
+
+  poolSize: 20,
+  socketTimeoutMS: 480000,
+  keepAlive: 300000,
+
+  keepAliveInitialDelay: 300000,
+  connectTimeoutMS: 30000,
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 1000,
+  useNewUrlParser: true
+});
 
 let db = mongoose.connection;
 

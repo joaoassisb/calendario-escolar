@@ -7,11 +7,14 @@ const api = require("./comentario.api");
 const router = express.Router();
 
 router
-  .route("/comentarios")
+  .route("/eventos/:eventoId/comentarios")
   .all(autho.requiresLocalLogin)
   .get((req, res, next) => {
     api
-      .query(req.query)
+      .query({
+        ...req.query,
+        evento: req.params.eventoId
+      })
       .then(comentarios => {
         res.send(comentarios);
       })
@@ -19,9 +22,13 @@ router
   })
   .post((req, res, next) => {
     api
-      .create(req.body, req.user._id)
-      .then(comentarios => {
-        res.send(comentarios);
+      .create({
+        ...req.body,
+        usuario: req.user._id,
+        evento: req.params.eventoId
+      })
+      .then(comentario => {
+        res.send(comentario);
       })
       .catch(next);
   });
@@ -35,7 +42,7 @@ router.param("comentarioId", (req, res, next, id) => {
     .catch(next);
 });
 router
-  .route("/comentarios/:comentarioId")
+  .route("/eventos/:eventoId/comentarios/:comentarioId")
   .all(autho.requiresLocalLogin)
   .get((req, res) => {
     res.send(req.comentario);

@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { ObjectId } = mongoose.SchemaTypes;
 
@@ -16,18 +16,14 @@ const ComentarioSchema = new Schema({
   },
   usuario: {
     type: ObjectId,
-    ref: 'Usuario',
+    ref: "Usuario",
     required: true
   },
   documento: {
     type: ObjectId,
-    refPath: 'modelo',
-    required: true
-  },
-  modelo: {
-    type: String,
+    ref: "Evento",
     required: true
   }
 });
 
-module.exports = mongoose.model('Comentario', ComentarioSchema, 'comentarios');
+module.exports = mongoose.model("Comentario", ComentarioSchema, "comentarios");
