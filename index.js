@@ -1,6 +1,6 @@
 "use strict";
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3001;
 const path = require("path");
 const mongoose = require("mongoose");
 const express = require("express");
@@ -9,7 +9,6 @@ const bodyParser = require("body-parser");
 const logger = require("morgan");
 const api = require("./backend/api/api");
 
-const API_PORT = 3001;
 const app = express();
 
 const router = express.Router();
@@ -52,7 +51,7 @@ app.use("/api", router);
 
 app.use(express.static("frontend/build"));
 
-app.get("*", function(req, res) {
+app.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
 });
 
