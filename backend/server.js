@@ -1,5 +1,6 @@
 "use strict";
 
+const path = require("path")
 const mongoose = require("mongoose");
 const express = require("express");
 
@@ -33,6 +34,7 @@ mongoose.connect(dbRoute, {
 
 let db = mongoose.connection;
 
+
 db.once("open", () =>
   console.log("conexão com o banco de dados estabelecida com sucesso")
 );
@@ -42,11 +44,20 @@ db.on(
   "error",
   console.error.bind(console, "conexão com o banco de dados falhou")
 );
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(logger("dev"));
+app.use(logger("dev")); 
 
+app.use(express.static(path.join(__dirname, '../frontend/public')))
 app.use("/api", router);
 
-app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
+app.get('/', function(req,res) {
+  res.sendFile(path.join(__dirname, '../frontend/public','index.html'))
+})
+
+module.exports = {
+  app: app,
+  port: process.env.PORT || 8080
+}; 
+
+
