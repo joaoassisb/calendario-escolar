@@ -5,10 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node backend/index.js",
+    "start": "node index.js",
     "build": "npm run build --prefix frontend",
     "frontend-install": "npm install --prefix frontend",
-    "server": "nodemon server.js",
     "frontend": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run frontend\""
   },
